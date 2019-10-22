@@ -38,14 +38,16 @@ and prints each recipe name (limited to print only 10 currently)
 """
 def parse_ingredients(recipes, list_of_ingredients):
     print(list_of_ingredients)
+    returned_recipes = []
     number_of_recipes = 10
     for recipe in recipes:
         if (number_of_recipes != 0):
             if (all(ingredients in recipe['ingredients'] for ingredients in list_of_ingredients )):
-                print(recipe['name'])
+                returned_recipes.append(recipe['name'])
                 number_of_recipes = number_of_recipes - 1
         else:
             break
+    return returned_recipes if returned_recipes else ['No Recipes Found']
 
 
 """Main method, calls all necessary methods
@@ -54,8 +56,11 @@ def parse_ingredients(recipes, list_of_ingredients):
 def main():
     recipes = download_from_kaggle()
     ingredients = get_ingredients()
-    parse_ingredients(recipes, ingredients)
+    print(parse_ingredients(recipes, ingredients))
 
+def run(list_of_ingredients):
+    recipes = download_from_kaggle()
+    return parse_ingredients(recipes, list_of_ingredients)
 
 
 main()
