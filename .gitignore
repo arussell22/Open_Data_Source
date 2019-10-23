@@ -1,0 +1,8 @@
+#All csv
+*.csv
+
+#All zip files
+*.zip
+
+#All .pyc
+*.pyc
