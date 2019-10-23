@@ -6,7 +6,7 @@ Required external libaries: kaggle for python 3, tkinter for python 3
 """
 import tkinter as tk
 import tkinter.scrolledtext as tkst
-import kaggle
+#import kaggle
 import zipfile
 import os
 import csv
@@ -76,9 +76,9 @@ class recipe_gui(tk.Tk):
     :returns: Ordereddict of all recipes
     """
     def download_from_kaggle(self):
-        kaggle.api.authenticate()
+#        kaggle.api.authenticate()
         if not(os.path.exists(os.getcwd()+'/RAW_recipes.csv')):
-            kaggle.api.dataset_download_file('shuyangli94/food-com-recipes-and-user-interactions', "RAW_recipes.csv", force=True, quiet=True)
+#           kaggle.api.dataset_download_file('shuyangli94/food-com-recipes-and-user-interactions', "RAW_recipes.csv", force=True, quiet=True)
             with zipfile.ZipFile(os.getcwd()+'/RAW_recipes.csv.zip', 'r') as zip_ref:
                 zip_ref.extractall(os.getcwd())
         recipes = csv.DictReader(open(os.getcwd()+'/RAW_recipes.csv'))

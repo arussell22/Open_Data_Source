@@ -2,7 +2,7 @@
 *.csv
 
 #All zip files
-*.zip
+.zip
 
 #All .pyc
 *.pyc
