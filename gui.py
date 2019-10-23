@@ -1,4 +1,9 @@
-#import food
+"""
+Recipes from Open Data - Gui Version
+Authors: Anthony Russell, Dillon Furey, Wesley Chang, Bryan Beach
+Dataset Used: Shuyang Li's Food.com Recipes and Interactions
+Required external libaries: kaggle for python 3, tkinter for python 3
+"""
 import tkinter as tk
 import tkinter.scrolledtext as tkst
 import kaggle
@@ -6,11 +11,16 @@ import zipfile
 import os
 import csv
 
-class application(tk.Tk):
+"""Gui using tkinter
+"""
+class recipe_gui(tk.Tk):
+    """Initializes and runs the GUI and necessary graphical components
+    """
     def __init__(self):
         tk.Tk.__init__(self)
         self.title('Find A Recipe!')
-        tk.Label(self, text='First Ingredient').pack()
+        tk.Label(self, text='Add Ingredients to Search for a Recipe').pack()
+        tk.Label(self, text='Note: Not adding any ingredients will return all recipes').pack()
         self.e1 = tk.Entry(self)
         self.e1.pack()
         self.ingredients = []
@@ -18,13 +28,13 @@ class application(tk.Tk):
         self.all_ingredients = tk.Label(self)
         self.all_ingredients.pack()
 
-        tk.Button(self, text='Add Ingredient', width=15, command=lambda: self.add_ingredient()).pack()
-        tk.Button(self, text='Find Recipes', width=15, command=lambda: self.run()).pack()
-        
+        tk.Button(self, text='Add Ingredient', width=15, command=self.add_ingredient).pack()
+        tk.Button(self, text='Find Recipes', width=15, command=self.run).pack()
+        tk.Button(self, text='Reset Ingredients', width=15, command=self.reset_ingredients).pack()
 
         self.frame1 = tk.Frame(
             self,
-            bg = '#808000'
+            bg = '#002C76'
         )
         self.frame1.pack(fill='both', expand='yes')
         self.found_recipes = tkst.ScrolledText(
@@ -38,6 +48,9 @@ class application(tk.Tk):
 
         self.mainloop()
 
+    """Adds an ingredient to the list of ingredients
+    Updates list of ingredients on GUI
+    """
     def add_ingredient(self):
         ingredient = self.e1.get()
         if ingredient not in self.ingredients:
@@ -49,6 +62,15 @@ class application(tk.Tk):
             count = count + 1
          self.all_ingredients.configure(text=ingredient_string)
         self.e1.delete(0, 'end')
+
+    """Resets the list of ingredients
+    Resets the list of ingredients on GUI
+    """
+    def reset_ingredients(self):
+        self.ingredients = []
+        self.all_ingredients.configure(text="")
+        self.e1.delete(0, 'end')
+
 
     """ Downloads the dataset from kaggle if not present
     :returns: Ordereddict of all recipes
@@ -63,14 +85,6 @@ class application(tk.Tk):
         return recipes
 
 
-    def get_ingredients(self):
-        print("Enter in a list of ingredients to search for. \n"+
-        "Separate ingredients with a comma without spaces. "+
-        "\nFor example: chicken,rice,peppers")
-        list_of_ingredients = input().split(',')
-        return list_of_ingredients
-
-
     """Parses through the dataset for any recipe that contains the list of ingredients 
     and prints each recipe name (limited to print only 10 currently)
 
@@ -78,23 +92,25 @@ class application(tk.Tk):
     :type recipes: Ordereddict
     :param list_of_ingredients: ingredients to search for
     :type list_of_ingredients: list
+    :return lists of recipes that contain the ingredients, or else 'No Recipes Found'
     """
     def parse_ingredients(self,recipes, list_of_ingredients):
-        print('parse',list_of_ingredients)
         returned_recipes = []
-        number_of_recipes = 10
-        for recipe in recipes:
-            if (number_of_recipes != 0):
-                if (all(ingredients in recipe['ingredients'] for ingredients in list_of_ingredients )):
-                    returned_recipes.append(recipe['name'])
-                    number_of_recipes = number_of_recipes - 1
-            else:
-                break
+        #number_of_recipes = 10
+        try:
+            for recipe in recipes:
+                #if (number_of_recipes != 0):
+                    if (all(ingredients in recipe['ingredients'] for ingredients in list_of_ingredients )):
+                        returned_recipes.append(recipe['name'])
+                        #number_of_recipes = number_of_recipes - 1
+                #else:
+                #    break
+        except TypeError as e:
+            print(e)
         return returned_recipes if returned_recipes else ['No Recipes Found']
 
     def run(self):
         recipes = self.download_from_kaggle()
-        print('run', self.ingredients)
         found_recipes = self.parse_ingredients(recipes, self.ingredients)
         recipe_string = ""
         count = 1
@@ -105,25 +121,6 @@ class application(tk.Tk):
         self.found_recipes.update()
         self.found_recipes.insert('insert', recipe_string)
 
-app = application()
-# ingredients = []
-# def add_ingredients(ingredient):
-#     if ingredient not in ingredients:
-#         ingredients.append(ingredient)
+app = recipe_gui()
 
-# gui = Tk()
-# gui.title('Find A Recipe!')
-
-# Label(gui, text='First Ingredient').grid(row=0) 
-# e1 = Entry(gui)  
-# e1.grid(row=0, column=1) 
-
-
-# ingredients = [e1.get()]
-
-# shown_ingredients = Label(gui, text='')
-# shown_ingredients.pack()
-# Button(gui, text='Find Recipes', width=25, command=lambda: food.run(ingredients)).pack()
-
-# mainloop()
 

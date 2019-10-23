@@ -1,6 +1,8 @@
 """
-Recipes from Open Data
+Recipes from Open Data - Command Line Version
 Authors: Anthony Russell, Dillon Furey, Wesley Chang, Bryan Beach
+Dataset Used: Shuyang Li's Food.com Recipes and Interactions
+Required external libaries: kaggle for python 3
 """
 import kaggle
 import zipfile
@@ -37,16 +39,18 @@ and prints each recipe name (limited to print only 10 currently)
 :type list_of_ingredients: list
 """
 def parse_ingredients(recipes, list_of_ingredients):
-    print(list_of_ingredients)
     returned_recipes = []
     number_of_recipes = 10
-    for recipe in recipes:
-        if (number_of_recipes != 0):
-            if (all(ingredients in recipe['ingredients'] for ingredients in list_of_ingredients )):
-                returned_recipes.append(recipe['name'])
-                number_of_recipes = number_of_recipes - 1
-        else:
-            break
+    try:
+        for recipe in recipes:
+            if (number_of_recipes != 0):
+                if (all(ingredients in recipe['ingredients'] for ingredients in list_of_ingredients )):
+                    returned_recipes.append(recipe['name'])
+                    number_of_recipes = number_of_recipes - 1
+            else:
+                break
+    except TypeError as e:
+        print(e)
     return returned_recipes if returned_recipes else ['No Recipes Found']
 
 
