@@ -81,7 +81,7 @@ class recipe_gui(tk.Tk):
 #           kaggle.api.dataset_download_file('shuyangli94/food-com-recipes-and-user-interactions', "RAW_recipes.csv", force=True, quiet=True)
             with zipfile.ZipFile(os.getcwd()+'/RAW_recipes.csv.zip', 'r') as zip_ref:
                 zip_ref.extractall(os.getcwd())
-        recipes = csv.DictReader(open(os.getcwd()+'/RAW_recipes.csv'))
+        recipes = csv.DictReader(open(os.getcwd()+'/RAW_recipes.csv',  encoding="utf8"))
         return recipes
 
 
